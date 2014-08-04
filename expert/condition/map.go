@@ -14,15 +14,16 @@ type Map struct {
 		implement something like <Hash() string> function later on,
 		so map[string]struct{} can be used
 	*/
-	Values map[data.Parameter]struct{}
+	Values  map[data.Parameter]struct{}
+	Exclude bool //true to pass if value is NOT in Values
 }
 
 //Check is the Condition interface implementation for Map
 func (m *Map) Check(params data.Parameters) bool {
 	if value, error := params.Get(m.Name); error == nil {
 		if _, check := m.Values[value]; check {
-			return true
+			return !m.Exclude
 		}
 	}
-	return false
+	return m.Exclude
 }

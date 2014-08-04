@@ -45,6 +45,23 @@ func TestKeyInMap(t *testing.T) {
 	}
 }
 
+func TestExclude(t *testing.T) {
+	testmap := Map{
+		Name: "testmap",
+		Values: map[data.Parameter]struct{}{
+			"one":   struct{}{},
+			"two":   struct{}{},
+			"three": struct{}{},
+		},
+		Exclude: true,
+	}
+	paramsMap["testmap"] = "four"
+	keyin := testmap.Check(data.CreateParameters(paramsMap))
+	if !keyin {
+		t.Error("Key 'testmap' has value, that not present in map, but exclude is true, result should be true")
+	}
+}
+
 func BenchmarkMap(b *testing.B) {
 	paramsMap["testmap"] = "two"
 	for i := int64(0); i < 500; i++ {
