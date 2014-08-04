@@ -15,7 +15,25 @@ trace.Logf("%s, %s", "log something", "another way")
 trace.LogBacktrace("something")
 ```
 
-Compilable program example and output:
+Output example:
+```
+2014/08/04 22:39:24 aaaa bbbb cccc  <C:/GoPath/src/test.go:9>
+2014/08/04 22:39:24 aaa bbb <C:/GoPath/src/test.go:10>
+2014/08/04 22:39:24 aa bb cc
+        at main.A(C:/GoPath/src/test.go:11)
+        at main.B(C:/GoPath/src/test.go:19)
+        at main.C(C:/GoPath/src/test.go:23)
+        at main.main(C:/GoPath/src/test.go:27)
+2014/08/04 22:39:24 a b
+        at main.A(C:/GoPath/src/test.go:12)
+        at main.B(C:/GoPath/src/test.go:19)
+        at main.C(C:/GoPath/src/test.go:23)
+        at main.main(C:/GoPath/src/test.go:27)
+2014/08/04 22:39:24 qqqqwwww <C:/GoPath/src/test.go:14>
+2014/08/04 22:39:24 qqq www <C:/GoPath/src/test.go:15>
+```
+
+Compilable program example:
 ``` golang
 package main
 
@@ -46,21 +64,4 @@ func main() {
 	C()
 }
 
-```
-
-```
-2014/08/04 22:39:24 aaaa bbbb cccc  <C:/GoPath/src/test.go:9>
-2014/08/04 22:39:24 aaa bbb <C:/GoPath/src/test.go:10>
-2014/08/04 22:39:24 aa bb cc
-        at main.A(C:/GoPath/src/test.go:11)
-        at main.B(C:/GoPath/src/test.go:19)
-        at main.C(C:/GoPath/src/test.go:23)
-        at main.main(C:/GoPath/src/test.go:27)
-2014/08/04 22:39:24 a b
-        at main.A(C:/GoPath/src/test.go:12)
-        at main.B(C:/GoPath/src/test.go:19)
-        at main.C(C:/GoPath/src/test.go:23)
-        at main.main(C:/GoPath/src/test.go:27)
-2014/08/04 22:39:24 qqqqwwww <C:/GoPath/src/test.go:14>
-2014/08/04 22:39:24 qqq www <C:/GoPath/src/test.go:15>
 ```
