@@ -10,8 +10,8 @@ Or just file and line number.
 ### Usage
 ``` golang
 trace.Error("error message")
-trace.Log("log something", something)
-trace.Logf("%s, %s", "log something", "another way")
+trace.Log("log something", something)                  //alternative to Lshortfile flag
+trace.Logf("%s, %s", "log something", "another way")   //alternative to Lshortfile flag
 trace.LogBacktrace("something")
 ```
 
