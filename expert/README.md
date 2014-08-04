@@ -16,6 +16,7 @@ for usage examples
 
 ### Quick schema
 
+```
 1. Input parameters
    - request parameters <map[string]Parameter> <type Parameter interface{}>
    - request initial weight <Weight> <type Weight interface{}>
@@ -26,3 +27,4 @@ for usage examples
    - <Rule: []conditions, []modifiers>
    - <condition.Check(params) bool>
    - <modifier.apply(Weight, params) Weight>
+```
