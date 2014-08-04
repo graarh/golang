@@ -1,8 +1,8 @@
 trace
 ======
 
-Trace package adds caller file name and line number to 
-logs and errors.
+Trace package adds full stack backtrace to log message.
+Or just file and line number.
 
 ### Installation
     go get github.com/graarh/golang/trace
