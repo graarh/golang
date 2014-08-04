@@ -20,6 +20,7 @@ func Errorf(format string, a ...interface{}) error {
 }
 
 //Log calls log.Println for given arguments and adds file name and line of caller
+//Another way to do so is the Lshortfile log flag
 func Log(v ...interface{}) {
 	v = append(v, fileLine())
 	log.Println(v...)
