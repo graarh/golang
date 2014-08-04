@@ -1,6 +1,8 @@
 golang
 ======
 
+[![Build status](https://travis-ci.org/graarh/golang.svg?branch=master)](https://travis-ci.org/graarh/golang)
+
 Expert system, written on golang, and various utility libraries
 
 ### Installation
