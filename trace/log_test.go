@@ -1,8 +1,8 @@
 package trace
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func BenchmarkBacktrace(b *testing.B) {

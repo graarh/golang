@@ -24,13 +24,13 @@ func CreateParameters(data map[string]Parameter) Parameters {
 	if requestType, ok := data["Type"].(uint); ok {
 		params.requestType = requestType
 	} else {
-		trace.Log("Parameters 'Type' value type must be 'uint'")
+		trace.LogBacktrace("Parameters 'Type' value type must be 'uint'")
 	}
 
 	if requestTime, ok := data["Time"].(int64); ok {
 		params.requestTime = int64(requestTime)
 	} else {
-		trace.Log("Parameters 'Time' value type must be 'int64'")
+		trace.LogBacktrace("Parameters 'Time' value type must be 'int64'")
 	}
 
 	return &params
