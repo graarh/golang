@@ -5,11 +5,6 @@ import (
 	"runtime"
 )
 
-func fileLine() string {
-	_, file, line, _ := runtime.Caller(2)
-	return fmt.Sprintf(" <%s:%v>", file, line)
-}
-
 func backtrace(skip int) string {
 	var stack string
 

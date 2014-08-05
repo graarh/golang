@@ -1,8 +1,7 @@
 trace
 ======
 
-Trace package adds full stack backtrace to log message.
-Or just file and line number.
+Trace package adds full stack backtrace to log message or error text.
 
 ### Installation
     go get github.com/graarh/golang/trace
@@ -10,28 +9,18 @@ Or just file and line number.
 ### Usage
 ``` golang
 trace.Error("error message")
-trace.Log("log something", something)                  //alternative to Lshortfile flag
-trace.Logf("%s, %s", "log something", "another way")   //alternative to Lshortfile flag
-trace.LogBacktrace("something")
+trace.Errorf("error %s", "message")
+trace.Log("something")
+trace.Logf("%s %s", "aaa", "bbb")
 ```
 
 Output example:
 ```
-2014/08/04 22:39:24 aaaa bbbb cccc  <C:/GoPath/src/test.go:9>
-2014/08/04 22:39:24 aaa bbb <C:/GoPath/src/test.go:10>
-2014/08/04 22:39:24 aa bb cc
-        at main.A(C:/GoPath/src/test.go:11)
-        at main.B(C:/GoPath/src/test.go:19)
-        at main.C(C:/GoPath/src/test.go:23)
-        at main.main(C:/GoPath/src/test.go:27)
-2014/08/04 22:39:24 a b
-        at main.A(C:/GoPath/src/test.go:12)
-        at main.B(C:/GoPath/src/test.go:19)
-        at main.C(C:/GoPath/src/test.go:23)
-        at main.main(C:/GoPath/src/test.go:27)
-2014/08/04 22:39:24 qqqqwwww <C:/GoPath/src/test.go:14>
-2014/08/04 22:39:24 qqq www <C:/GoPath/src/test.go:15>
-```
+2014/08/05 11:18:55 aaaa bbbb cccc
+	at main.A(/usr/local/go/src/test.go:9)
+	at main.B(/usr/local/go/src/test.go:17)
+	at main.C(/usr/local/go/src/test.go:21)
+	at main.main(/usr/local/go/src/test.go:25)```
 
 Compilable program example:
 ``` golang
@@ -45,8 +34,6 @@ import (
 func A() {
 	trace.Log("aaaa", "bbbb", "cccc")
 	trace.Logf("%s %s", "aaa", "bbb")
-	trace.LogBacktrace("aa", "bb", "cc")
-	trace.LogBacktracef("%s %s", "a", "b")
 
 	log.Print(trace.Error("qqqq", "wwww"))
 	log.Print(trace.Errorf("%s %s", "qqq", "www"))
@@ -63,5 +50,4 @@ func C() {
 func main() {
 	C()
 }
-
 ```
