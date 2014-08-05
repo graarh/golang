@@ -20,7 +20,8 @@ Output example:
 	at main.A(/usr/local/go/src/test.go:9)
 	at main.B(/usr/local/go/src/test.go:17)
 	at main.C(/usr/local/go/src/test.go:21)
-	at main.main(/usr/local/go/src/test.go:25)```
+	at main.main(/usr/local/go/src/test.go:25)
+```
 
 Compilable program example:
 ``` golang
