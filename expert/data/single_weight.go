@@ -1,8 +1,8 @@
 package data
 
 import (
-	"reflect"
 	"github.com/graarh/golang/trace"
+	"reflect"
 )
 
 //Comparable is alias to any buildin type that can be compared
@@ -13,7 +13,7 @@ type SingleWeight struct {
 	Value Comparable
 }
 
-//Compare is the Weight interface function implementation
+//Less is the Weight interface function implementation
 func (sw1 *SingleWeight) Less(w Weight) bool {
 	sw2 := w.(*SingleWeight)
 
@@ -44,6 +44,7 @@ func (sw1 *SingleWeight) Less(w Weight) bool {
 	return false
 }
 
+//Add is a Weight interface implementation
 func (sw1 *SingleWeight) Add(w Weight) {
 	sw2 := w.(*SingleWeight)
 

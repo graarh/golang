@@ -53,7 +53,12 @@ var params = data.CreateParameters(paramsMap)
 // conditions passed, modifier applied -> mod weight
 func TestApplied(t *testing.T) {
 	rule := RuleRecord{"rule", conditions[0:3], mods}
-	result := rule.Calculate(&weight, params).(*data.SingleWeight)
+	calculated, affected := rule.Calculate(&weight, params)
+
+	if !affected {
+		t.Error("Rule affects weight cause conditions should be passed, but false given")
+	}
+	result := calculated.(*data.SingleWeight)
 
 	if result.Value.(int) != 10 {
 		t.Error("Modifier of rule was set to return 10, but given ", result.Value)
@@ -69,17 +74,22 @@ func TestNotApplied(t *testing.T) {
 	failedParamsMap["second"] = "failed"
 
 	rule := RuleRecord{"rule", conditions[0:3], mods}
-	result := rule.Calculate(&weight, data.CreateParameters(failedParamsMap)).(*data.SingleWeight)
+	_, affected := rule.Calculate(&weight, data.CreateParameters(failedParamsMap))
 
-	if result.Value != 5 {
-		t.Error("Second condition of rule should fail, so the result is 5, but given ", result.Value)
+	if affected {
+		t.Error("Second condition of rule should fail, so the affected should be false")
 	}
 }
 
 // no conditions, modifier applied -> mod weight
 func TestNoConditions(t *testing.T) {
 	rule := RuleRecord{"rule", conditions[0:0], mods}
-	result := rule.Calculate(&weight, params).(*data.SingleWeight)
+	calculated, affected := rule.Calculate(&weight, params)
+	result := calculated.(*data.SingleWeight)
+
+	if !affected {
+		t.Error("No conditions == always passed, affected should be true")
+	}
 
 	if result.Value.(int) != 10 {
 		t.Error("No condtions == always passed, and modifier of promotion was set to return 10, "+

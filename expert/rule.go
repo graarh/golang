@@ -9,7 +9,7 @@ type Rule interface {
 	Conditions() []Condition
 	Modifiers() []Modifier
 
-	Calculate(initial data.Weight, params data.Parameters) data.Weight
+	Calculate(initial data.Weight, params data.Parameters) (data.Weight, bool)
 }
 
 // RuleRecord is the base implementation of the Rule interface
@@ -36,7 +36,7 @@ func (p *RuleRecord) Modifiers() []Modifier {
 
 // Calculate applies modifiers to initial weight if conditions are passed with
 // given params, implementation of the Rule interface
-func (p *RuleRecord) Calculate(initial data.Weight, params data.Parameters) data.Weight {
+func (p *RuleRecord) Calculate(initial data.Weight, params data.Parameters) (data.Weight, bool) {
 	applyModifiers := true
 	for _, condition := range p.Conditions() {
 		check := condition.Check(params)
@@ -51,8 +51,8 @@ func (p *RuleRecord) Calculate(initial data.Weight, params data.Parameters) data
 		for _, modifier := range p.Modifiers() {
 			modWeight = modifier.Modify(modWeight, params)
 		}
-		return modWeight
+		return modWeight, true
 	}
 
-	return initial
+	return nil, false
 }
