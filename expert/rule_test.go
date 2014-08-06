@@ -35,10 +35,10 @@ var conditions = [...]Condition{
 }
 
 var mods = []Modifier{
-	&modifier.IwModifier{func(int) int { return 9 }},
-	&modifier.IwModifier{func(int) int { return 10 }},
+	&modifier.Static{&data.SingleWeight{9}},
+	&modifier.Static{&data.SingleWeight{10}},
 }
-var weight = data.IntWeight{5}
+var weight = data.SingleWeight{5}
 var paramsMap = map[string]data.Parameter{
 	"zero":   "hour",
 	"first":  "two",
@@ -53,9 +53,9 @@ var params = data.CreateParameters(paramsMap)
 // conditions passed, modifier applied -> mod weight
 func TestApplied(t *testing.T) {
 	rule := RuleRecord{"rule", conditions[0:3], mods}
-	result := rule.Calculate(&weight, params).(*data.IntWeight)
+	result := rule.Calculate(&weight, params).(*data.SingleWeight)
 
-	if result.Value != 10 {
+	if result.Value.(int) != 10 {
 		t.Error("Modifier of rule was set to return 10, but given ", result.Value)
 	}
 }
@@ -69,7 +69,7 @@ func TestNotApplied(t *testing.T) {
 	failedParamsMap["second"] = "failed"
 
 	rule := RuleRecord{"rule", conditions[0:3], mods}
-	result := rule.Calculate(&weight, data.CreateParameters(failedParamsMap)).(*data.IntWeight)
+	result := rule.Calculate(&weight, data.CreateParameters(failedParamsMap)).(*data.SingleWeight)
 
 	if result.Value != 5 {
 		t.Error("Second condition of rule should fail, so the result is 5, but given ", result.Value)
@@ -79,9 +79,9 @@ func TestNotApplied(t *testing.T) {
 // no conditions, modifier applied -> mod weight
 func TestNoConditions(t *testing.T) {
 	rule := RuleRecord{"rule", conditions[0:0], mods}
-	result := rule.Calculate(&weight, params).(*data.IntWeight)
+	result := rule.Calculate(&weight, params).(*data.SingleWeight)
 
-	if result.Value != 10 {
+	if result.Value.(int) != 10 {
 		t.Error("No condtions == always passed, and modifier of promotion was set to return 10, "+
 			"it should return 10, but given ", result.Value)
 	}

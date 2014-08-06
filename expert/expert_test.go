@@ -10,9 +10,9 @@ import (
 func TestZeroRules(t *testing.T) {
 	rules := []Rule{}
 	resultWeight, ruleName := Calculate(&weight, rules, params)
-	iwWeight := resultWeight.(*data.IntWeight)
+	iwWeight := resultWeight.(*data.SingleWeight)
 
-	if iwWeight.Value != weight.Value {
+	if iwWeight.Value.(int) != weight.Value.(int) {
 		t.Error("Calculate with no rules should return initial weight, not", iwWeight)
 	}
 
@@ -24,16 +24,16 @@ func TestZeroRules(t *testing.T) {
 // rules that does not provide optimal weight -> initial weight
 func TestGoroutineRulesNotOptimal(t *testing.T) {
 	m1 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 1 }},
-		&modifier.IwModifier{func(int) int { return 2 }},
+		&modifier.Static{&data.SingleWeight{1}},
+		&modifier.Static{&data.SingleWeight{2}},
 	}
 	m2 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 2 }},
-		&modifier.IwModifier{func(int) int { return 3 }},
+		&modifier.Static{&data.SingleWeight{2}},
+		&modifier.Static{&data.SingleWeight{3}},
 	}
 	m3 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 3 }},
-		&modifier.IwModifier{func(int) int { return 4 }},
+		&modifier.Static{&data.SingleWeight{3}},
+		&modifier.Static{&data.SingleWeight{4}},
 	}
 
 	rules := []Rule{
@@ -42,9 +42,9 @@ func TestGoroutineRulesNotOptimal(t *testing.T) {
 		&RuleRecord{"rule3", conditions[1:3], m3},
 	}
 	resultWeight, ruleName := Calculate(&weight, rules, params)
-	iwWeight := resultWeight.(*data.IntWeight)
+	iwWeight := resultWeight.(*data.SingleWeight)
 
-	if iwWeight.Value != weight.Value {
+	if iwWeight.Value.(int) != weight.Value.(int) {
 		t.Error("Calculate should return optimal weight, initial one in this case, not ", iwWeight)
 	}
 	if ruleName != "" {
@@ -55,16 +55,16 @@ func TestGoroutineRulesNotOptimal(t *testing.T) {
 // rules that provide optimal weight -> optimal weight
 func TestGoroutineRulesOptimalSelection(t *testing.T) {
 	m1 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 1 }},
-		&modifier.IwModifier{func(int) int { return 2 }},
+		&modifier.Static{&data.SingleWeight{1}},
+		&modifier.Static{&data.SingleWeight{2}},
 	}
 	m2 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 6 }},
-		&modifier.IwModifier{func(int) int { return 7 }},
+		&modifier.Static{&data.SingleWeight{6}},
+		&modifier.Static{&data.SingleWeight{7}},
 	}
 	m3 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 3 }},
-		&modifier.IwModifier{func(int) int { return 4 }},
+		&modifier.Static{&data.SingleWeight{3}},
+		&modifier.Static{&data.SingleWeight{4}},
 	}
 	rules := []Rule{
 		&RuleRecord{"rule1", conditions[0:2], m1},
@@ -72,9 +72,9 @@ func TestGoroutineRulesOptimalSelection(t *testing.T) {
 		&RuleRecord{"rule3", conditions[1:3], m3},
 	}
 	resultWeight, ruleName := Calculate(&weight, rules, params)
-	iwWeight := resultWeight.(*data.IntWeight)
+	iwWeight := resultWeight.(*data.SingleWeight)
 
-	if iwWeight.Value != 7 {
+	if iwWeight.Value.(int) != 7 {
 		t.Error("Calculate should return optimal weight, IntWeight.Value == 2 in this case, not", iwWeight)
 	}
 	if ruleName != "rule2" {
@@ -85,16 +85,16 @@ func TestGoroutineRulesOptimalSelection(t *testing.T) {
 func BenchmarkCommonCalculation(b *testing.B) {
 	//try to increase amount of rules and look for benchmark changes
 	m1 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 9 }},
-		&modifier.IwModifier{func(int) int { return 10 }},
+		&modifier.Static{&data.SingleWeight{9}},
+		&modifier.Static{&data.SingleWeight{10}},
 	}
 	m2 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 1 }},
-		&modifier.IwModifier{func(int) int { return 2 }},
+		&modifier.Static{&data.SingleWeight{1}},
+		&modifier.Static{&data.SingleWeight{2}},
 	}
 	m3 := []Modifier{
-		&modifier.IwModifier{func(int) int { return 13 }},
-		&modifier.IwModifier{func(int) int { return 14 }},
+		&modifier.Static{&data.SingleWeight{13}},
+		&modifier.Static{&data.SingleWeight{14}},
 	}
 	rules := []Rule{
 		&RuleRecord{"rule1", conditions[0:2], m1},
