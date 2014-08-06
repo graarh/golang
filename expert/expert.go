@@ -24,7 +24,7 @@ func Calculate(initial data.Weight, rules []Rule, params data.Parameters) (data.
 	for _ = range rules {
 		calculatedWeight := <-results
 
-		if optimal.weight.Compare(calculatedWeight.weight) == -1 { // less than
+		if optimal.weight.Less(calculatedWeight.weight) {
 			optimal = calculatedWeight
 		}
 	}

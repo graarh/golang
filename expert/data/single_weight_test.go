@@ -3,27 +3,38 @@ package data
 import "testing"
 
 func TestCompare(t *testing.T) {
-	iw1 := &SingleWeight{1}
-	iw2 := &SingleWeight{2}
-	iw3 := &SingleWeight{3}
+	sw1 := &SingleWeight{1}
+	sw2 := &SingleWeight{2}
+	sw3 := &SingleWeight{3}
 
-	if iw2.Compare(iw2) != 0 {
-		t.Error("Same SingleWeight's Compare result should be 0")
+	if sw2.Less(sw2)  {
+		t.Error("Same SingleWeight's Less result should be true")
 	}
 
-	if iw2.Compare(iw1) != 1 {
-		t.Error("SingleWeight with value 2 should return 1(greater) in comparsion with value 1")
+	if sw2.Less(sw1) {
+		t.Error("SingleWeight with value 2 should return false(greater) in comparsion with value 1")
 	}
 
-	if iw2.Compare(iw3) != -1 {
-		t.Error("SingleWeight with value 2 should return 1(greater) in comparsion with value 3")
+	if !sw2.Less(sw3) {
+		t.Error("SingleWeight with value 2 should return true(lesser) in comparsion with value 3")
+	}
+}
+
+func TestAdd(t *testing.T) {
+	sw1 := &SingleWeight{1}
+	sw2 := &SingleWeight{2}
+	
+	sw1.Add(sw2)
+
+	if sw1.Value.(int64) != 3 {
+		t.Error("Add should do 1 + 2 == 3, not ", sw1.Value)
 	}
 }
 
 func BenchmarkCommonCalculation(b *testing.B) {
-	iw1 := &SingleWeight{1}
-	iw2 := &SingleWeight{2}
+	sw1 := &SingleWeight{1}
+	sw2 := &SingleWeight{2}
 	for i := 0; i < b.N; i++ {
-		iw1.Compare(iw2)
+		sw1.Less(sw2)
 	}
 }

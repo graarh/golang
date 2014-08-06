@@ -14,36 +14,49 @@ type SingleWeight struct {
 }
 
 //Compare is the Weight interface function implementation
-func (sw1 *SingleWeight) Compare(w Weight) int {
+func (sw1 *SingleWeight) Less(w Weight) bool {
 	sw2 := w.(*SingleWeight)
 
 	if sw1.Value == sw2.Value {
-		return 0
+		return false
 	}
 
 	switch sw1.Value.(type) {
 	case string:
 		if sw1.Value.(string) < sw2.Value.(string) {
-			return -1
+			return true
 		}
-		return 1
 	case uint, uint8, uint16, uint32, uint64:
 		if reflect.ValueOf(sw1.Value).Uint() < reflect.ValueOf(sw2.Value).Uint() {
-			return -1
+			return true
 		}
-		return 1
 	case int, int8, int16, int32, int64:
 		if reflect.ValueOf(sw1.Value).Int() < reflect.ValueOf(sw2.Value).Int() {
-			return -1
+			return true
 		}
-		return 1
 	case float32, float64:
 		if reflect.ValueOf(sw1.Value).Float() < reflect.ValueOf(sw2.Value).Float() {
-			return -1
+			return true
 		}
-		return 1
 	default:
 		trace.Log("Not comparable type in SingleWeight.Value", sw1.Value)
 	}
-	return 1
+	return false
+}
+
+func (sw1 *SingleWeight) Add(w Weight) {
+	sw2 := w.(*SingleWeight)
+
+	switch sw1.Value.(type) {
+	case string:
+		sw1.Value = sw1.Value.(string) + sw2.Value.(string)
+	case uint, uint8, uint16, uint32, uint64:
+		sw1.Value = reflect.ValueOf(sw1.Value).Uint() + reflect.ValueOf(sw2.Value).Uint()
+	case int, int8, int16, int32, int64:
+		sw1.Value = reflect.ValueOf(sw1.Value).Int() + reflect.ValueOf(sw2.Value).Int()
+	case float32, float64:
+		sw1.Value = reflect.ValueOf(sw1.Value).Float() + reflect.ValueOf(sw2.Value).Float()
+	default:
+		trace.Log("Not comparable type in SingleWeight.Value", sw1.Value)
+	}
 }
