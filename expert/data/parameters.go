@@ -12,6 +12,7 @@ type Parameter interface{}
 // expert system input parameters
 type Parameters interface {
 	Get(name string) (Parameter, error) // Get one of the parameters
+	All() map[string]Parameter          // Get all parameters as map
 	Type() uint                         // Get type of the request
 	Time() int64                        // Get time of the request
 }
@@ -21,16 +22,20 @@ type Parameters interface {
 func CreateParameters(data map[string]Parameter) Parameters {
 	params := parametersRecord{data, 0, 0}
 
-	if requestType, ok := data["Type"].(uint); ok {
-		params.requestType = requestType
-	} else {
-		trace.Log("Parameters 'Type' value type must be 'uint'")
+	if _, ok := data["Type"]; ok {
+		if requestType, ok := data["Type"].(uint); ok {
+			params.requestType = requestType
+		} else {
+			trace.Log("Parameters 'Type' value type must be 'uint'")
+		}
 	}
 
-	if requestTime, ok := data["Time"].(int64); ok {
-		params.requestTime = int64(requestTime)
-	} else {
-		trace.Log("Parameters 'Time' value type must be 'int64'")
+	if _, ok := data["Time"]; ok {
+		if requestTime, ok := data["Time"].(int64); ok {
+			params.requestTime = int64(requestTime)
+		} else {
+			trace.Log("Parameters 'Time' value type must be 'int64'")
+		}
 	}
 
 	return &params
@@ -47,6 +52,10 @@ func (p *parametersRecord) Get(name string) (Parameter, error) {
 		return val, nil
 	}
 	return "", fmt.Errorf("Parameter with '%s' name not found", name)
+}
+
+func (p *parametersRecord) All() map[string]Parameter {
+	return p.parameters
 }
 
 func (p *parametersRecord) Type() uint {
