@@ -1,14 +1,21 @@
 package main
 
 import (
+	"flag"
 	"github.com/graarh/golang/expert-examples/cellphone"
 	"log"
 )
 
-const calls = "../calls/mixed.csv"
-const plans = "../config/callplans.yml"
+const defaultCalls = "../calls/mixed.csv"
+const defaultPlans = "../config/callplans.yml"
+
+var calls, plans string
 
 func main() {
+	flag.StringVar(&calls, "calls", defaultCalls, "csv file with calls")
+	flag.StringVar(&plans, "plans", defaultPlans, "billing plans configuration file")
+	flag.Parse()
+
 	calls, err := cellphone.LoadCalls(calls)
 	if err != nil {
 		panic(err)
